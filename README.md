@@ -14,6 +14,8 @@ My initial run took a staggering amount of time, and that was with 28 threads ru
 Here's the output of my first run:
 
 ![image](https://github.com/user-attachments/assets/9b858e7e-9fcf-4b97-9408-357b5276f418)
+
+
 Max ones: 100
 Completed Instances: 1000000000
 Total duration (ms): 7625833
