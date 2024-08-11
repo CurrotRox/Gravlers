@@ -28,3 +28,28 @@ Process finished with exit code 0
 2.118286 hours
 
 I'm not sure how replicable these results would be on other machines, but it's what I've got.
+
+
+Edit: 
+I figure I should explain the program so anyone who comes to look can look at my code and hopefully understand what it's doing. I've included a lot of comments with my code, but I'll explain it here too.
+First, import required libraries.
+Class main
+  Start the clock
+  Generate an instance of the Random library, to be used with generating numbers
+  Set initial variables - Amount of rolls, and the amount of threads to use on the computer.
+  Setup Executor service, which will manage the threads running on the CPU, and setup the "instance" we'll be cloning will all those threads.
+  For every roll, start a new thread with the instance.
+  The executor.shutdown() doesn't turn everything off immediately, it starts a soft-shutdown, so as threads finish and record their results, they're ignored.
+  While the executor is still running, wait and check again every 25ms. (This can probably be larger, given that this whole thing takes hours, a few miliseconds isn't going to matter).
+  Record the end time, and calculate it in seconds.
+  Print results
+
+class RollInstance
+  Setup static variables (A static variable is a shared variable between ALL instances of the class)
+  Constructor for the class, taking in the Random instance. When passing a complex object like this, it's just referenced, so we're not generating this 1 billion times.
+  The @override is because we're overwriting the "Runnable's" run method with a new one, which is what each thread calls when it starts.
+  The run just rolls 231 random numbers, breaks it into 4 possibilies, and if one of those possibilities is 0 (the computer's 1), add one to count. After 231 iterations, it updatesMaxOnes
+  updateMaxOnes, takes in a contender number, and checks it against the static variable. I had to use AtomicNumbers for this, which is a library specifically used to avoid read-write overlap on variables like this.
+    It checks whichever one is bigger, and assigns it to be the variable.
+    Then it increments the run counter, which is how I make sure that we're actually running the simulation a verifiable 1 billion times.
+  The last two are static methods that are called to return the results to the main function, to be printed.
